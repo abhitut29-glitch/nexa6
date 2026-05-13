@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaAI — Enterprise Intelligence built on Trust</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,300;1,14..32,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#ffffff;--s1:#f8fafc;--s2:#f1f5f9;--s3:#e8edf5;
+  --blue:#2563eb;--blue2:#1d4ed8;--cyan:#0891b2;
+  --text:#0f172a;--muted:#475569;--dim:#94a3b8;--border:#e2e8f0;
+  --grad:linear-gradient(135deg,#2563eb,#0891b2);
+  --ff:'Inter',system-ui,sans-serif;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+  --shadow-lg:0 4px 24px rgba(0,0,0,.10),0 1px 4px rgba(0,0,0,.06);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#f1f5f9}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:0 1px 0 rgba(0,0,0,.04)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 40px;height:64px;display:flex;align-items:center}
+.logo{display:flex;align-items:center;gap:10px;margin-right:44px;text-decoration:none;cursor:pointer}
+.logo-mark{width:32px;height:32px;background:var(--grad);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff;flex-shrink:0;font-family:var(--ff)}
+.logo-text{font-weight:700;font-size:18px;color:var(--text);letter-spacing:-.03em}
+.logo-text span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-tabs{display:flex;align-items:center;gap:2px;flex:1}
+.nav-tab{padding:8px 14px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500;color:var(--muted);border:none;background:none;font-family:var(--ff);transition:all .15s;position:relative;white-space:nowrap}
+.nav-tab:hover{color:var(--text);background:var(--s2)}
+.nav-tab.active{color:var(--blue);background:rgba(37,99,235,.08)}
+.nav-tab.active::after{content:'';position:absolute;bottom:-1px;left:14px;right:14px;height:2px;background:var(--grad);border-radius:1px}
+.nav-dropdown{position:relative}
+.nav-dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:6px;min-width:200px;box-shadow:var(--shadow-lg)}
+.nav-dropdown:hover .nav-dropdown-menu{display:block}
+.dropdown-item{display:block;padding:9px 12px;border-radius:6px;color:var(--muted);font-size:13.5px;font-weight:500;cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;font-family:var(--ff)}
+.dropdown-item:hover{color:var(--text);background:var(--s1)}
+.nav-cta{margin-left:auto;display:flex;gap:8px}
+.btn{padding:8px 18px;border-radius:8px;font-size:13.5px;font-weight:600;cursor:pointer;border:none;font-family:var(--ff);transition:all .18s;white-space:nowrap}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
+.btn-ghost:hover{color:var(--text);border-color:var(--blue)}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.25)}
+.btn-primary:hover{box-shadow:0 4px 16px rgba(37,99,235,.35);transform:translateY(-1px)}
+.btn-lg{padding:13px 28px;font-size:15px;font-weight:600}
+
+/* SECTIONS */
+.section{display:none;min-height:100vh;padding-top:64px}
+.section.active{display:block}
+
+/* HERO */
+.hero{position:relative;min-height:90vh;display:flex;align-items:center;overflow:hidden;background:#04112b}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,17,43,.62) 0%,rgba(4,17,43,.82) 100%);pointer-events:none}
+.hero-inner{max-width:1280px;margin:0 auto;padding:100px 40px 80px;position:relative;z-index:2}
+.hero-label{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px;margin-bottom:28px}
+.hero-label-dot{width:6px;height:6px;border-radius:50%;background:#38bdf8;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+.hero-label span{font-size:12px;font-weight:600;color:#7dd3fc;letter-spacing:.06em;text-transform:uppercase}
+.hero-title{font-size:clamp(38px,5.5vw,70px);font-weight:800;line-height:1.05;letter-spacing:-.035em;margin-bottom:22px;max-width:820px;color:#fff}
+.hero-title .accent{background:linear-gradient(135deg,#60a5fa,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:18px;line-height:1.7;color:rgba(255,255,255,.7);max-width:540px;margin-bottom:40px;font-weight:300}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:72px}
+.btn-hero{padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:var(--ff);transition:all .18s}
+.btn-hero-primary{background:linear-gradient(135deg,#2563eb,#0891b2);color:#fff;border:none;box-shadow:0 4px 20px rgba(37,99,235,.4)}
+.btn-hero-primary:hover{box-shadow:0 6px 28px rgba(37,99,235,.55);transform:translateY(-2px)}
+.btn-hero-ghost{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.25);backdrop-filter:blur(8px)}
+.btn-hero-ghost:hover{background:rgba(255,255,255,.18)}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.1);border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.12);max-width:860px}
+.hero-stat{background:rgba(255,255,255,.06);backdrop-filter:blur(12px);padding:24px 28px}
+.hero-stat-val{font-size:34px;font-weight:800;background:linear-gradient(135deg,#60a5fa,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;letter-spacing:-.02em}
+.hero-stat-label{font-size:12px;color:rgba(255,255,255,.55);font-weight:400;line-height:1.4}
+
+/* SHARED */
+.w{max-width:1280px;margin:0 auto;padding:0 40px}
+.section-tag{font-size:11px;font-weight:600;color:var(--cyan);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.section-head{font-size:clamp(28px,3.5vw,42px);font-weight:700;letter-spacing:-.025em;margin-bottom:14px;line-height:1.15;color:var(--text)}
+.section-sub{font-size:16px;color:var(--muted);line-height:1.75;max-width:520px;font-weight:400}
+.divider{border:none;border-top:1px solid var(--border)}
+
+/* PILLARS */
+.pillars{padding:96px 40px}
+.pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px}
+.pillar{background:var(--bg);border:1.5px solid var(--border);border-radius:16px;padding:40px 36px;transition:all .2s;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.pillar::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);opacity:0;transition:opacity .2s;border-radius:16px 16px 0 0}
+.pillar:hover{border-color:rgba(37,99,235,.25);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.pillar:hover::before{opacity:1}
+.pillar-num{font-size:11px;color:var(--dim);letter-spacing:.08em;margin-bottom:20px;font-weight:500;text-transform:uppercase}
+.pillar-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:20px}
+.pillar-icon.blue{background:rgba(37,99,235,.08);border:1.5px solid rgba(37,99,235,.15)}
+.pillar-icon.cyan{background:rgba(8,145,178,.08);border:1.5px solid rgba(8,145,178,.15)}
+.pillar-icon.green{background:rgba(16,185,129,.08);border:1.5px solid rgba(16,185,129,.15)}
+.pillar-title{font-size:18px;font-weight:700;margin-bottom:12px;letter-spacing:-.02em;color:var(--text)}
+.pillar-body{font-size:14.5px;line-height:1.75;color:var(--muted);font-weight:400}
+
+/* TRUSTED */
+.trusted{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:56px 40px;text-align:center;background:var(--s1)}
+.trusted-label{font-size:11px;color:var(--dim);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:36px}
+.trusted-logos{max-width:900px;margin:0 auto;display:flex;justify-content:center;flex-wrap:wrap;gap:56px;align-items:center}
+.trusted-logo{font-size:14px;font-weight:700;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;opacity:.6;transition:opacity .2s}
+.trusted-logo:hover{opacity:1;color:var(--muted)}
+
+/* WHAT SETS US APART */
+.apart-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px}
+.apart-card{background:var(--bg);border:1.5px solid var(--border);border-radius:14px;padding:28px 28px;transition:all .2s;box-shadow:var(--shadow)}
+.apart-card:hover{border-color:rgba(37,99,235,.25);box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.apart-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+
+/* VALUE SECTIONS */
+.value-section{padding:96px 40px;background:var(--s1);border-top:1px solid var(--border)}
+.value-section:nth-child(even){background:var(--bg)}
+.value-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:52px}
+.value-card{padding:36px 32px;border-radius:16px;border:1.5px solid var(--border);background:var(--bg);box-shadow:var(--shadow);transition:all .2s}
+.value-card:hover{border-color:rgba(37,99,235,.2);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.value-card .vc-icon{width:48px;height:48px;border-radius:12px;background:rgba(37,99,235,.07);border:1.5px solid rgba(37,99,235,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px}
+.value-card .vc-title{font-size:18px;font-weight:700;letter-spacing:-.02em;color:var(--text);margin-bottom:12px}
+.value-card .vc-body{font-size:14.5px;line-height:1.75;color:var(--muted)}
+
+/* PRODUCT */
+.prod-hero{background:var(--s1);border-bottom:1px solid var(--border);padding:80px 40px}
+.prod-hero-inner{max-width:1280px;margin:0 auto}
+.cap-tabs-wrap{display:flex;gap:4px;margin-bottom:44px;background:var(--s1);border:1.5px solid var(--border);border-radius:12px;padding:5px;width:fit-content}
+.cap-tab{padding:9px 22px;border-radius:8px;cursor:pointer;font-size:13.5px;font-weight:500;color:var(--muted);transition:all .18s;border:none;background:none;font-family:var(--ff)}
+.cap-tab.active{background:var(--bg);color:var(--text);box-shadow:var(--shadow);font-weight:600}
+.cap-content{display:none}
+.cap-content.active{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.cap-visual{background:var(--s2);border:1.5px solid var(--border);border-radius:16px;padding:36px;min-height:340px;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:14px}
+.data-card{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;box-shadow:var(--shadow)}
+.data-card-label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-weight:600}
+.data-card-val{font-size:20px;font-weight:700;margin-bottom:3px;letter-spacing:-.02em}
+.data-card-val.green{color:#059669}.data-card-val.red{color:#dc2626}.data-card-val.amber{color:#d97706}.data-card-val.blue{color:var(--blue)}
+.data-card-sub{font-size:11px;color:var(--dim)}
+.data-cards-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sys-tag{display:inline-block;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:600;background:rgba(37,99,235,.07);color:var(--blue);border:1px solid rgba(37,99,235,.15);margin:2px}
+.cap-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:4px}
+.cap-list li{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;color:var(--muted);line-height:1.6}
+.cap-list li::before{content:'→';color:var(--blue);font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* SOLUTIONS */
+.sol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;padding:80px 40px;max-width:1280px;margin:0 auto}
+.sol-card{background:var(--bg);border:1.5px solid var(--border);border-radius:18px;padding:44px 40px;transition:all .2s;box-shadow:var(--shadow);cursor:default}
+.sol-card:hover{border-color:rgba(37,99,235,.2);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.sol-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:24px}
+.sol-icon.blue{background:rgba(37,99,235,.08);border:1.5px solid rgba(37,99,235,.15)}
+.sol-icon.cyan{background:rgba(8,145,178,.08);border:1.5px solid rgba(8,145,178,.15)}
+.sol-icon.green{background:rgba(5,150,105,.08);border:1.5px solid rgba(5,150,105,.15)}
+.sol-icon.purple{background:rgba(124,58,237,.08);border:1.5px solid rgba(124,58,237,.15)}
+.sol-title{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:12px;color:var(--text)}
+.sol-body{font-size:14.5px;line-height:1.78;color:var(--muted);margin-bottom:24px}
+.sol-pts{list-style:none;display:flex;flex-direction:column;gap:10px}
+.sol-pts li{font-size:13.5px;color:var(--muted);display:flex;align-items:flex-start;gap:10px;line-height:1.55}
+.sol-pts li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:5px}
+
+/* INDUSTRIES */
+.ind-hero{background:var(--s1);border-bottom:1px solid var(--border);padding:72px 40px}
+.ind-hero-inner{max-width:1280px;margin:0 auto}
+.ind-tabs-wrap{border-bottom:1px solid var(--border)}
+.ind-tabs{display:flex;gap:0;max-width:1280px;margin:0 auto;padding:0 40px;overflow-x:auto}
+.ind-tab{padding:14px 24px;cursor:pointer;font-size:14px;font-weight:500;color:var(--muted);border:none;background:none;font-family:var(--ff);border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:all .18s;white-space:nowrap}
+.ind-tab:hover{color:var(--text)}
+.ind-tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+.ind-content{display:none;max-width:1280px;margin:0 auto;padding:72px 40px}
+.ind-content.active{display:grid;grid-template-columns:5fr 4fr;gap:72px;align-items:start}
+.ind-title{font-size:clamp(26px,3vw,40px);font-weight:800;letter-spacing:-.025em;margin-bottom:18px;line-height:1.1;color:var(--text)}
+.ind-body{font-size:15px;line-height:1.8;color:var(--muted);margin-bottom:36px}
+.ind-cards{display:flex;flex-direction:column;gap:16px}
+.ind-card{padding:22px 24px;border-radius:12px;border:1.5px solid var(--border);background:var(--bg);box-shadow:var(--shadow);transition:all .2s}
+.ind-card:hover{border-color:rgba(37,99,235,.2);box-shadow:var(--shadow-lg)}
+.ind-card-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:7px;letter-spacing:-.01em;line-height:1.3}
+.ind-card-body{font-size:13.5px;line-height:1.65;color:var(--muted)}
+.ind-sidebar{display:flex;flex-direction:column;gap:16px}
+.ind-metric{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;padding:22px 24px;box-shadow:var(--shadow)}
+.ind-metric-val{font-size:30px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px;letter-spacing:-.02em}
+.ind-metric-label{font-size:13px;color:var(--muted)}
+.ind-quote{background:var(--s1);border:1.5px solid var(--border);border-left:3px solid var(--blue);border-radius:12px;padding:22px 24px}
+.ind-quote-text{font-size:14px;line-height:1.7;color:var(--muted);font-style:italic;margin-bottom:10px}
+.ind-quote-author{font-size:11.5px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+
+/* ABOUT */
+.about-hero{min-height:55vh;display:flex;align-items:center;background:linear-gradient(160deg,#f8fafc 0%,#eff6ff 100%)}
+.about-inner{max-width:1280px;margin:0 auto;padding:110px 40px 72px}
+.about-title{font-size:clamp(30px,5vw,60px);font-weight:800;letter-spacing:-.035em;margin-bottom:20px;line-height:1.05;max-width:760px;color:var(--text)}
+.about-title .accent{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.about-sub{font-size:17px;line-height:1.75;color:var(--muted);max-width:520px;margin-bottom:0}
+.about-values{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1280px;margin:0 auto;padding:72px 40px}
+.about-value{background:var(--bg);border:1.5px solid var(--border);border-radius:16px;padding:36px;box-shadow:var(--shadow)}
+.about-value-title{font-size:17px;font-weight:700;margin-bottom:12px;color:var(--text);letter-spacing:-.02em}
+.about-value-body{font-size:14px;line-height:1.75;color:var(--muted)}
+.about-mission{max-width:1280px;margin:0 auto;padding:72px 40px;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;border-top:1px solid var(--border)}
+.about-mission-title{font-size:clamp(22px,2.5vw,34px);font-weight:700;letter-spacing:-.025em;margin-bottom:18px;line-height:1.2;color:var(--text)}
+.about-mission-body{font-size:15px;line-height:1.8;color:var(--muted)}
+.about-facts{display:flex;flex-direction:column;gap:16px}
+.about-fact{display:flex;align-items:flex-start;gap:20px;padding:22px 24px;background:var(--s1);border:1.5px solid var(--border);border-radius:12px}
+.about-fact-val{font-size:26px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;flex-shrink:0;min-width:72px;letter-spacing:-.02em}
+.about-fact-text{font-size:13.5px;color:var(--muted);line-height:1.6}
+
+/* RESOURCES */
+.res-wrap{max-width:1280px;margin:0 auto;padding:72px 40px}
+.res-filter{display:flex;gap:8px;margin-bottom:40px;flex-wrap:wrap}
+.res-filter-btn{padding:7px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);border:1.5px solid var(--border);background:none;font-family:var(--ff);transition:all .15s}
+.res-filter-btn:hover,.res-filter-btn.active{background:rgba(37,99,235,.07);color:var(--blue);border-color:rgba(37,99,235,.25)}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.res-card{background:var(--bg);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;cursor:pointer;box-shadow:var(--shadow)}
+.res-card:hover{border-color:rgba(37,99,235,.2);transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.res-card-img{height:150px;display:flex;align-items:center;justify-content:center;font-size:36px}
+.res-card-img.blue{background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(8,145,178,.06))}
+.res-card-img.green{background:linear-gradient(135deg,rgba(5,150,105,.1),rgba(37,99,235,.06))}
+.res-card-img.amber{background:linear-gradient(135deg,rgba(217,119,6,.1),rgba(220,38,38,.06))}
+.res-card-img.purple{background:linear-gradient(135deg,rgba(124,58,237,.1),rgba(37,99,235,.06))}
+.res-card-body{padding:22px}
+.res-card-type{font-size:10px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.res-card-title{font-size:15.5px;font-weight:700;margin-bottom:8px;line-height:1.3;letter-spacing:-.015em;color:var(--text)}
+.res-card-excerpt{font-size:13.5px;color:var(--muted);line-height:1.65}
+
+/* FAQ */
+.faq-wrap{background:var(--s1);border-top:1px solid var(--border);padding:80px 40px}
+.faq-inner{max-width:800px;margin:0 auto}
+.faq-item{background:var(--bg);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .2s;margin-bottom:10px;box-shadow:var(--shadow)}
+.faq-item:hover{border-color:rgba(37,99,235,.2)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;gap:16px}
+.faq-q h3{font-size:16px;font-weight:600;line-height:1.35;color:var(--text);letter-spacing:-.01em}
+.faq-icon{font-size:18px;color:var(--blue);flex-shrink:0;transition:transform .2s;line-height:1;font-weight:400}
+.faq-body{display:none;padding:0 24px 20px}
+.faq-body p{font-size:14.5px;line-height:1.78;color:var(--muted)}
+
+/* FOOTER */
+footer{background:var(--s1);border-top:1px solid var(--border);padding:56px 40px 36px}
+.footer-inner{max-width:1280px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;margin-bottom:48px}
+.footer-brand p{font-size:13.5px;color:var(--muted);line-height:1.7;margin-top:14px}
+.footer-col-title{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:16px}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-links li{font-size:13.5px;color:var(--muted);cursor:pointer;transition:color .15s}
+.footer-links li:hover{color:var(--text)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;align-items:center}
+.footer-copy{font-size:12px;color:var(--dim)}
+.footer-legal{display:flex;gap:20px}
+.footer-legal a{font-size:12px;color:var(--dim);text-decoration:none;cursor:pointer}
+.footer-legal a:hover{color:var(--muted)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.fade-up{animation:fadeUp .5s ease forwards}
+.delay-1{animation-delay:.1s;opacity:0}.delay-2{animation-delay:.2s;opacity:0}.delay-3{animation-delay:.3s;opacity:0}.delay-4{animation-delay:.4s;opacity:0}
+
+@media(max-width:900px){
+  .pillars-grid,.value-grid,.sol-grid,.about-values,.footer-top{grid-template-columns:1fr}
+  .cap-content.active,.ind-content.active,.about-mission{grid-template-columns:1fr}
+  .hero-stats{grid-template-columns:1fr 1fr}
+  .apart-grid{grid-template-columns:1fr}
+  .res-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="showSection('overview')">
+      <div class="logo-mark">N</div>
+      <span class="logo-text">Nexa<span>AI</span></span>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showSection('overview')" id="tab-overview">Overview</button>
+      <button class="nav-tab" onclick="showSection('product')" id="tab-product">Product</button>
+      <button class="nav-tab" onclick="showSection('solutions')" id="tab-solutions">Solutions</button>
+      <div class="nav-dropdown">
+        <button class="nav-tab" id="tab-industries" onclick="showSection('industries')">Industries ▾</button>
+        <div class="nav-dropdown-menu">
+          <button class="dropdown-item" onclick="showSection('industries');showIndustry('discrete')">Discrete Manufacturing</button>
+          <button class="dropdown-item" onclick="showSection('industries');showIndustry('process')">Process Manufacturing</button>
+          <button class="dropdown-item" onclick="showSection('industries');showIndustry('lifescience')">Life Science</button>
+          <button class="dropdown-item" onclick="showSection('industries');showIndustry('energy')">Energy</button>
+          <button class="dropdown-item" onclick="showSection('industries');showIndustry('hitech')">Hi-Tech</button>
+        </div>
+      </div>
+      <button class="nav-tab" onclick="showSection('about')" id="tab-about">About</button>
+      <button class="nav-tab" onclick="showSection('resources')" id="tab-resources">Resources</button>
+    </div>
+    <div class="nav-cta">
+      <button class="btn btn-ghost">Sign In</button>
+      <button class="btn btn-primary">Request a Demo</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ OVERVIEW ═══════════════ -->
+<div id="section-overview" class="section active">
+
+  <!-- HERO WITH CANVAS ANIMATION -->
+  <div class="hero">
+    <video id="hero-vid" autoplay muted playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none">
+      <source src="video1.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-inner">
+      <div class="hero-label fade-up"><div class="hero-label-dot"></div><span>Agentic Enterprise Intelligence</span></div>
+      <h1 class="hero-title fade-up delay-1">Enterprise Intelligence<br><span class="accent">built on Trust</span></h1>
+      <p class="hero-sub fade-up delay-2">Delivering fact-based, knowledge-driven AI decisions with traceable reasoning and human confidence.</p>
+      <div class="hero-actions fade-up delay-3">
+        <button class="btn-hero btn-hero-primary" onclick="showSection('product')">Explore the Platform</button>
+        <button class="btn-hero btn-hero-ghost">Request a Demo</button>
+      </div>
+      <div class="hero-stats fade-up delay-4">
+        <div class="hero-stat">
+          <div class="hero-stat-val">10+</div>
+          <div class="hero-stat-label">Intelligent systems connected in a single intelligence layer</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">&lt; 3s</div>
+          <div class="hero-stat-label">Average response time across cross-system queries</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">100%</div>
+          <div class="hero-stat-label">Data traceability — every answer cited to source records</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">Zero</div>
+          <div class="hero-stat-label">Workflow changes required — works within existing architecture</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THREE PILLARS -->
+  <div class="pillars w">
+    <p class="section-tag">Why NexaAI</p>
+    <h2 class="section-head">Intelligence built for how enterprises actually operate</h2>
+    <p class="section-sub">Three dimensions that define how NexaAI creates value — from the business context it addresses to the security standards it upholds.</p>
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="pillar-num">01 — Business Context</div>
+        <div class="pillar-icon blue">◈</div>
+        <h3 class="pillar-title">The cost of disconnected knowledge</h3>
+        <p class="pillar-body">Organisations carry a compounding cost every day when the right answer lives across systems that have never spoken to each other. Decisions that should take minutes stretch into days. The risk is not just inefficiency — it is the wrong call made with incomplete information at exactly the moment it matters most.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02 — Enterprise Process</div>
+        <div class="pillar-icon cyan">⬡</div>
+        <h3 class="pillar-title">Intelligence that fits your architecture</h3>
+        <p class="pillar-body">NexaAI sits across your existing enterprise architecture without replacing it. It reads the data your systems already produce, correlates it in real time, and returns a single coherent answer with every relevant dimension accounted for. Your teams work faster inside the workflows they already know.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03 — Data &amp; Security</div>
+        <div class="pillar-icon green">⬢</div>
+        <h3 class="pillar-title">Traceable answers. Governed data.</h3>
+        <p class="pillar-body">Every answer is fully traceable to its source records. Nothing is inferred without citation. Access controls mirror your existing organisational permissions so each user sees precisely the data their role entitles them to. All data remains within your governed environment at all times.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRUSTED BY -->
+  <div class="trusted">
+    <p class="trusted-label">Trusted by operational leaders across regulated industries</p>
+    <div class="trusted-logos">
+      <span class="trusted-logo">Meridian Corp</span>
+      <span class="trusted-logo">Vantage Systems</span>
+      <span class="trusted-logo">Axiom Process</span>
+      <span class="trusted-logo">Helix Manufacturing</span>
+      <span class="trusted-logo">Orion Energy</span>
+      <span class="trusted-logo">Stratos Biotech</span>
+    </div>
+  </div>
+
+  <!-- WHAT SETS US APART -->
+  <div class="pillars w" style="padding-top:80px">
+    <p class="section-tag">What sets us apart</p>
+    <h2 class="section-head">Ten reasons operational leaders choose NexaAI</h2>
+    <div class="apart-grid">
+      <div class="apart-card">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div class="apart-icon" style="background:rgba(37,99,235,.07);border:1.5px solid rgba(37,99,235,.15)">⚡</div>
+          <div><h3 style="font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em">Quick to deploy</h3>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--muted)">Operational in 6–12 weeks. No 18-month implementation, no consulting army, no re-platforming.</p></div>
+        </div>
+      </div>
+      <div class="apart-card">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div class="apart-icon" style="background:rgba(37,99,235,.07);border:1.5px solid rgba(37,99,235,.15)">◈</div>
+          <div><h3 style="font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em">Domain intelligence pre-loaded</h3>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--muted)">NexaAI already understands PLM, ERP, MES, QMS, and LIMS relationships out of the box. No ontology to build, no configuration workshops to run.</p></div>
+        </div>
+      </div>
+      <div class="apart-card">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div class="apart-icon" style="background:rgba(8,145,178,.07);border:1.5px solid rgba(8,145,178,.15)">✓</div>
+          <div><h3 style="font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em">Data Readiness Checker</h3>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--muted)">Assesses the quality and completeness of your connected system data before go-live so you know exactly what NexaAI can and cannot answer from day one.</p></div>
+        </div>
+      </div>
+      <div class="apart-card">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div class="apart-icon" style="background:rgba(8,145,178,.07);border:1.5px solid rgba(8,145,178,.15)">⬢</div>
+          <div><h3 style="font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em">Built-in security</h3>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--muted)">Record-level role-based access control, full audit trail of every query and response, and complete data sovereignty. Your data never leaves your governed perimeter.</p></div>
+        </div>
+      </div>
+      <div class="apart-card">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div class="apart-icon" style="background:rgba(5,150,105,.07);border:1.5px solid rgba(5,150,105,.15)">◎</div>
+          <div><h3 style="font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em">Lowest TCO in the category</h3>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--muted)">A fraction of comparable platform contract values with no engineering overhead, no custom build, and no specialist team to sustain it post-deployment.</p></div>
+        </div>
+      </div>
+      <div class="apart-card">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div class="apart-icon" style="background:rgba(5,150,105,.07);border:1.5px solid rgba(5,150,105,.15)">⎔</div>
+          <div><h3 style="font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em">Every answer is cited</h3>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--muted)">Every response references the exact source records behind it. Audit-ready, regulator-ready, and defensible at every level of the organisation.</p></div>
+        </div>
+      </div>
+      <div class="apart-card">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div class="apart-icon" style="background:rgba(124,58,237,.07);border:1.5px solid rgba(124,58,237,.15)">⬡</div>
+          <div><h3 style="font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em">Zero disruption to existing systems</h3>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--muted)">NexaAI connects to what you already run and replaces nothing. Your PLM, ERP, and QMS keep working exactly as they do today.</p></div>
+        </div>
+      </div>
+      <div class="apart-card">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div class="apart-icon" style="background:rgba(124,58,237,.07);border:1.5px solid rgba(124,58,237,.15)">◉</div>
+          <div><h3 style="font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em">Cross-system by design</h3>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--muted)">Built from the ground up to correlate records across enterprise systems in a single query. Not a search layer retrofitted to structured data.</p></div>
+        </div>
+      </div>
+      <div class="apart-card">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div class="apart-icon" style="background:rgba(217,119,6,.07);border:1.5px solid rgba(217,119,6,.15)">⬟</div>
+          <div><h3 style="font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em">Industry-specific depth</h3>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--muted)">Manufacturing, process, life science, and energy intelligence is built in, not bolted on — understanding regulatory submissions, supply risk signals, and quality events natively.</p></div>
+        </div>
+      </div>
+      <div class="apart-card">
+        <div style="display:flex;align-items:flex-start;gap:14px">
+          <div class="apart-icon" style="background:rgba(217,119,6,.07);border:1.5px solid rgba(217,119,6,.15)">◆</div>
+          <div><h3 style="font-size:15.5px;font-weight:700;color:var(--text);margin-bottom:6px;letter-spacing:-.01em">Mid-market to enterprise</h3>
+          <p style="font-size:13.5px;line-height:1.65;color:var(--muted)">Purpose-built for regulated manufacturers and industrial organisations. Powerful enough for complexity, accessible enough for scale.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VALUE ELEMENTS -->
+  <div class="value-section">
+    <div class="w">
+      <p class="section-tag">A day in the life</p>
+      <h2 class="section-head">How NexaAI transforms the way your people work</h2>
+      <p class="section-sub">From individual engineers to enterprise-wide operations — intelligence that scales with your organisation.</p>
+      <div class="value-grid">
+        <div class="value-card">
+          <div class="vc-icon">👷</div>
+          <h3 class="vc-title">A day in the life of an engineer</h3>
+          <p class="vc-body">Engineers stop navigating disconnected systems and start asking questions — getting trusted, cited answers that surface root causes and recommendations in real time. Decisions that once took days of cross-system investigation now happen in the flow of work, with humans always in control.</p>
+        </div>
+        <div class="value-card">
+          <div class="vc-icon">🔗</div>
+          <h3 class="vc-title">Intelligence that scales as your enterprise does</h3>
+          <p class="vc-body">As data volumes, user demand, and operational complexity grow, NexaAI scales proportionally — continuously reasoning across connected systems, workflows, and live signals without increasing manual effort. Extend trusted intelligence across teams, plants, functions, and geographies from a single platform.</p>
+        </div>
+        <div class="value-card">
+          <div class="vc-icon">⚙</div>
+          <h3 class="vc-title">Built to expand without starting over</h3>
+          <p class="vc-body">NexaAI is built on composable AI modules — connectors, reasoning agents, and knowledge pipelines — so new use cases deploy rapidly on top of what already exists. Every expansion accelerates the next, creating a compounding intelligence foundation across the enterprise.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ PRODUCT ═══════════════ -->
+<div id="section-product" class="section">
+  <div class="prod-hero">
+    <div class="prod-hero-inner">
+      <p class="section-tag">The Platform</p>
+      <h1 style="font-size:clamp(32px,4vw,52px);font-weight:800;letter-spacing:-.03em;margin-bottom:18px;line-height:1.1;color:var(--text)">Your operations produce the data.<br>NexaAI produces the answers.</h1>
+      <p style="font-size:17px;color:var(--muted);line-height:1.75;max-width:580px;font-weight:400">A structured intelligence layer built on the operational records your enterprise already generates — no new data pipelines, no document ingestion, no approximations.</p>
+    </div>
+  </div>
+  <div style="max-width:1280px;margin:0 auto;padding:72px 40px">
+    <div class="cap-tabs-wrap">
+      <button class="cap-tab active" id="ctab-0">Cross-System Intelligence</button>
+      <button class="cap-tab" id="ctab-1">Decision Confidence</button>
+      <button class="cap-tab" id="ctab-2">Security &amp; Governance</button>
+    </div>
+    <div class="cap-content active" id="cap-intelligence">
+      <div>
+        <p class="section-tag">Capability 01</p>
+        <h2 style="font-size:clamp(24px,2.5vw,34px);font-weight:700;letter-spacing:-.025em;margin-bottom:16px;line-height:1.2;color:var(--text)">Every system. One intelligence layer.</h2>
+        <p style="font-size:15px;line-height:1.8;color:var(--muted);margin-bottom:28px">NexaAI connects your enterprise systems and resolves queries that span all of them simultaneously — returning a complete answer with every operational, financial, and compliance dimension in a single response.</p>
+        <ul class="cap-list">
+          <li>Reads structured transactional data across all connected enterprise systems without duplication or migration</li>
+          <li>Correlates records across system boundaries in real time — linking dimensions automatically</li>
+          <li>Delivers a single coherent answer with full cross-system context, citing the source records behind every finding</li>
+          <li>Works within your existing architecture — no new workflows, no data movement, no disruption</li>
+        </ul>
+      </div>
+      <div class="cap-visual">
+        <div class="data-card"><div class="data-card-label">Cross-system query resolved</div><div class="data-card-val blue">4 systems · 6 records</div><div class="data-card-sub">Response generated in 1.8 seconds</div></div>
+        <div class="data-cards-row">
+          <div class="data-card"><div class="data-card-label">Supply status</div><div class="data-card-val amber">3.2 weeks ATP</div><div class="data-card-sub">Threshold breach detected</div></div>
+          <div class="data-card"><div class="data-card-label">Quality events</div><div class="data-card-val red">2 open CAPAs</div><div class="data-card-sub">1 overdue · 1 FDA linked</div></div>
+        </div>
+        <div class="data-card"><div class="data-card-label">Connected systems</div><div style="margin-top:6px"><span class="sys-tag">PLM</span><span class="sys-tag">ERP</span><span class="sys-tag">MES</span><span class="sys-tag">QMS</span><span class="sys-tag">LIMS</span></div></div>
+      </div>
+    </div>
+    <div class="cap-content" id="cap-decisions">
+      <div>
+        <p class="section-tag">Capability 02</p>
+        <h2 style="font-size:clamp(24px,2.5vw,34px);font-weight:700;letter-spacing:-.025em;margin-bottom:16px;line-height:1.2;color:var(--text)">From question to confident action.</h2>
+        <p style="font-size:15px;line-height:1.8;color:var(--muted);margin-bottom:28px">NexaAI computes decisions — not retrieved text. Every answer includes the reasoning chain: the data that supports it, the rules that govern it, and the records that can be audited against it.</p>
+        <ul class="cap-list">
+          <li>Answers operational questions with full contextual reasoning — computed conclusions, not retrieved passages</li>
+          <li>Surfaces risk, cost, compliance, supply, and operational impact simultaneously</li>
+          <li>Provides the reasoning chain behind every answer so decisions can be defended and audited</li>
+          <li>Adapts response depth to the persona — operational detail for practitioners, executive summary for leadership</li>
+        </ul>
+      </div>
+      <div class="cap-visual">
+        <div class="data-card"><div class="data-card-label">Decision supported</div><div class="data-card-val green">Substitution risk assessed</div><div class="data-card-sub">14 / 15 criteria evaluated</div></div>
+        <div class="data-cards-row">
+          <div class="data-card"><div class="data-card-label">Criteria met</div><div class="data-card-val green">14 PASS</div><div class="data-card-sub">FFF equivalence confirmed</div></div>
+          <div class="data-card"><div class="data-card-label">Blocking item</div><div class="data-card-val red">1 PENDING</div><div class="data-card-sub">Certification in qualification</div></div>
+        </div>
+        <div class="data-card"><div class="data-card-label">Recommendation</div><div class="data-card-val amber">Cannot approve yet</div><div class="data-card-sub">3 steps to resolution identified</div></div>
+      </div>
+    </div>
+    <div class="cap-content" id="cap-security">
+      <div>
+        <p class="section-tag">Capability 03</p>
+        <h2 style="font-size:clamp(24px,2.5vw,34px);font-weight:700;letter-spacing:-.025em;margin-bottom:16px;line-height:1.2;color:var(--text)">Enterprise-grade security. Built in, not bolted on.</h2>
+        <p style="font-size:15px;line-height:1.8;color:var(--muted);margin-bottom:28px">Security and data governance are architectural foundations. NexaAI enforces access at the record level, preserves complete audit logs, and ensures sensitive operational data never leaves your defined perimeter.</p>
+        <ul class="cap-list">
+          <li>Role-based access enforced at the individual record level — each user sees exactly what their role permits</li>
+          <li>Single sign-on and full compatibility with existing enterprise identity providers</li>
+          <li>Complete audit log of every query, response, and data access event — independently verifiable</li>
+          <li>Data sovereignty controls — all processing within your governed environment</li>
+        </ul>
+      </div>
+      <div class="cap-visual">
+        <div class="data-card"><div class="data-card-label">Access model</div><div class="data-card-val blue">Record-level RBAC</div><div class="data-card-sub">Inherits organisational permissions</div></div>
+        <div class="data-cards-row">
+          <div class="data-card"><div class="data-card-label">Audit log</div><div class="data-card-val green">100% coverage</div><div class="data-card-sub">Every query logged</div></div>
+          <div class="data-card"><div class="data-card-label">Data residency</div><div class="data-card-val green">In-perimeter</div><div class="data-card-sub">No external exposure</div></div>
+        </div>
+        <div class="data-card"><div class="data-card-label">Compliance standards</div><div style="margin-top:6px"><span class="sys-tag">SOC 2</span><span class="sys-tag">ISO 27001</span><span class="sys-tag">GDPR</span><span class="sys-tag">HIPAA</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SOLUTIONS ═══════════════ -->
+<div id="section-solutions" class="section">
+  <div class="prod-hero">
+    <div class="prod-hero-inner">
+      <p class="section-tag">Solutions</p>
+      <h1 style="font-size:clamp(32px,4vw,52px);font-weight:800;letter-spacing:-.03em;margin-bottom:18px;line-height:1.1;color:var(--text)">Operational intelligence<br>for every critical domain</h1>
+      <p style="font-size:17px;color:var(--muted);line-height:1.75;max-width:560px">NexaAI delivers structured answers across the four domains where cross-system intelligence creates the highest operational and compliance value.</p>
+    </div>
+  </div>
+  <div class="sol-grid">
+    <div class="sol-card">
+      <div class="sol-icon blue">◈</div>
+      <h3 class="sol-title">Supply Chain Intelligence</h3>
+      <p class="sol-body">Transform fragmented supply data into a unified risk picture. NexaAI connects procurement, inventory, supplier performance, and demand planning into a single operational view — surfacing exposure before it becomes a disruption.</p>
+      <ul class="sol-pts">
+        <li>Real-time availability and lead time risk across the full supplier portfolio</li>
+        <li>Single-source dependency identification with qualified alternate assessment</li>
+        <li>Revenue exposure quantification by component, supplier, and product family</li>
+        <li>Supplier quality correlation — linking incoming inspection failures to field events</li>
+      </ul>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon cyan">⬡</div>
+      <h3 class="sol-title">Quality &amp; Compliance Intelligence</h3>
+      <p class="sol-body">Connect quality events across every system to understand true organisational exposure. From open corrective actions to lot genealogy to customer notification status — complete picture in real time.</p>
+      <ul class="sol-pts">
+        <li>CAPA and non-conformance tracking linked to production lots and field units</li>
+        <li>Cost of poor quality computation across scrap, rework, warranty, and lost production</li>
+        <li>Lot traceability from incoming inspection through to shipped serial number</li>
+        <li>Recall scope assessment with customer notification status in a single query</li>
+      </ul>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon green">⬢</div>
+      <h3 class="sol-title">Production &amp; Operations Intelligence</h3>
+      <p class="sol-body">Understand what is happening on your production floor — and why — without crossing five systems to get the answer. Work orders, lot genealogy, OEE data, and quality events in a coherent operational picture.</p>
+      <ul class="sol-pts">
+        <li>Work order status with blocking reason and downstream production impact</li>
+        <li>OEE analysis linked to quality events and component lot performance</li>
+        <li>Manufacturing BOM and routing synchronisation gap identification</li>
+        <li>Component lot consumed per work order with quarantine and ship status</li>
+      </ul>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon purple">⎔</div>
+      <h3 class="sol-title">Regulatory &amp; Submission Intelligence</h3>
+      <p class="sol-body">Regulatory submissions are complex, deadline-driven, and cross-functional. NexaAI connects change control, validation status, and submission trackers to tell regulatory teams exactly where each submission stands.</p>
+      <ul class="sol-pts">
+        <li>Submission status with days remaining and blocking issue identified automatically</li>
+        <li>Change control impact on regulatory submissions mapped end to end</li>
+        <li>Validation document completeness — IQ, OQ, PQ status per change</li>
+        <li>Agency correspondence log correlated with open submissions and deadlines</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ INDUSTRIES ═══════════════ -->
+<div id="section-industries" class="section">
+  <div class="ind-hero">
+    <div class="ind-hero-inner">
+      <p class="section-tag">Industries</p>
+      <h2 class="section-head">Built for the complexity of regulated, asset-intensive industries</h2>
+      <p class="section-sub" style="margin-top:10px">Purpose-built operational intelligence for the five sectors where data complexity, compliance burden, and decision speed are highest.</p>
+    </div>
+  </div>
+  <div class="ind-tabs-wrap">
+    <div class="ind-tabs">
+      <button class="ind-tab active" onclick="showIndustry('discrete')" id="ind-tab-discrete">Discrete Manufacturing</button>
+      <button class="ind-tab" onclick="showIndustry('process')" id="ind-tab-process">Process Manufacturing</button>
+      <button class="ind-tab" onclick="showIndustry('lifescience')" id="ind-tab-lifescience">Life Science</button>
+      <button class="ind-tab" onclick="showIndustry('energy')" id="ind-tab-energy">Energy</button>
+      <button class="ind-tab" onclick="showIndustry('hitech')" id="ind-tab-hitech">Hi-Tech</button>
+    </div>
+  </div>
+
+  <!-- DISCRETE MANUFACTURING -->
+  <div class="ind-content active" id="ind-discrete">
+    <div>
+      <p class="section-tag">Discrete Manufacturing</p>
+      <h2 class="ind-title">Complete visibility across every engineering change, every time</h2>
+      <p class="ind-body">Discrete manufacturers operate across interconnected systems that rarely share a common language. Engineering changes live in PLM. Supply constraints live in ERP. Quality events live in QMS. NexaAI connects them — turning that complexity into decisive operational advantage.</p>
+      <div class="ind-cards">
+        <div class="ind-card">
+          <h3 class="ind-card-title">NexaAI maps the full cross-system impact of any change order — before the change control meeting begins</h3>
+          <p class="ind-card-body">From BOMs and work orders to supply exposure and blocked submissions. Save weeks of manual cross-system analysis on every ECO raised.</p>
+        </div>
+        <div class="ind-card">
+          <h3 class="ind-card-title">One assessment tells you if your supply chain can support your programme</h3>
+          <p class="ind-card-body">NexaAI scores supplier qualifications, ATP positions, and single-source risk across the full component tree in a single query. Eliminate months of fragmented supplier validation and commit to programmes with confidence.</p>
+        </div>
+        <div class="ind-card">
+          <h3 class="ind-card-title">A single traceable chain from design requirement to delivered product</h3>
+          <p class="ind-card-body">NexaAI connects every requirement to its BOM entry, approved supplier, and production lot — creating a live, auditable evidence chain on demand. Cut audit preparation time from weeks to minutes.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ind-sidebar">
+      <div class="ind-metric"><div class="ind-metric-val">73%</div><div class="ind-metric-label">Reduction in time to complete cross-system impact assessments</div></div>
+      <div class="ind-metric"><div class="ind-metric-val">4×</div><div class="ind-metric-label">Faster pre-audit preparation with full data traceability</div></div>
+      <div class="ind-quote"><p class="ind-quote-text">"The question was never where the data is — it was always how to connect it fast enough to matter."</p><span class="ind-quote-author">VP Operations, Precision Equipment Manufacturer</span></div>
+    </div>
+  </div>
+
+  <!-- PROCESS MANUFACTURING -->
+  <div class="ind-content" id="ind-process">
+    <div>
+      <p class="section-tag">Process Manufacturing</p>
+      <h2 class="ind-title">Instant root cause from batch failure to every contributing factor</h2>
+      <p class="ind-body">Process manufacturers run at high throughput with narrow tolerance for error. A single quality deviation can halt an entire line. NexaAI traces any quality deviation through raw material lots, process parameters, and equipment states — before the next shift starts.</p>
+      <div class="ind-cards">
+        <div class="ind-card">
+          <h3 class="ind-card-title">Instant root cause from batch failure to every contributing factor</h3>
+          <p class="ind-card-body">NexaAI traces any quality deviation through raw material lots, process parameters, and equipment states in a single query. Reduce batch investigation cycles from days to under an hour.</p>
+        </div>
+        <div class="ind-card">
+          <h3 class="ind-card-title">Continuous supplier quality intelligence across every production run</h3>
+          <p class="ind-card-body">NexaAI connects incoming material quality to in-process measurements and finished product outcomes — identifying which supplier batches are driving variation. Stop repeat quality failures before the next order is placed.</p>
+        </div>
+        <div class="ind-card">
+          <h3 class="ind-card-title">Full exposure mapping before any recipe or process change is approved</h3>
+          <p class="ind-card-body">NexaAI correlates batch records, customer specifications, and regulatory approvals simultaneously — so every process change carries complete context. Prevent costly post-change discoveries and accelerate change approval cycles.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ind-sidebar">
+      <div class="ind-metric"><div class="ind-metric-val">60%</div><div class="ind-metric-label">Faster identification of multi-batch quality trends before product release</div></div>
+      <div class="ind-metric"><div class="ind-metric-val">Zero</div><div class="ind-metric-label">Manual cross-system queries required for OEE-quality correlation</div></div>
+      <div class="ind-quote"><p class="ind-quote-text">"In continuous operations, you cannot afford to wait for a morning report. You need the answer at shift handover."</p><span class="ind-quote-author">Director of Process Excellence, Global Chemical Group</span></div>
+    </div>
+  </div>
+
+  <!-- LIFE SCIENCE -->
+  <div class="ind-content" id="ind-lifescience">
+    <div>
+      <p class="section-tag">Life Science</p>
+      <h2 class="ind-title">Automatic evidence chain from design requirement to verified outcome</h2>
+      <p class="ind-body">Life science organisations operate under the most demanding compliance frameworks in any industry. Every decision carries regulatory consequence. NexaAI delivers cross-system intelligence with full auditability, source citation, and role-based access built into every answer.</p>
+      <div class="ind-cards">
+        <div class="ind-card">
+          <h3 class="ind-card-title">Automatic evidence chain from design requirement to verified outcome</h3>
+          <p class="ind-card-body">NexaAI links every design input to its verification record, LIMS result, and validation evidence in real time — keeping the Design History File complete without manual compilation. Reduce inspection preparation from weeks to a single query.</p>
+        </div>
+        <div class="ind-card">
+          <h3 class="ind-card-title">Instant regulatory impact assessment for every change, across every market</h3>
+          <p class="ind-card-body">NexaAI maps affected jurisdictions, triggered submission types, and incomplete validation activities the moment a change is raised. Prevent submission delays and eliminate the cost of late-stage regulatory surprises.</p>
+        </div>
+        <div class="ind-card">
+          <h3 class="ind-card-title">Complete field exposure trace from quality signal to customer notification</h3>
+          <p class="ind-card-body">NexaAI connects any quality event to the component lot, production batch, shipped serial, and customer site in one query — confirming CAPA linkage and notification status instantly. Compress field action investigations from weeks to minutes.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ind-sidebar">
+      <div class="ind-metric"><div class="ind-metric-val">100%</div><div class="ind-metric-label">Traceability from incoming lot to shipped serial number in a single query</div></div>
+      <div class="ind-metric"><div class="ind-metric-val">Days</div><div class="ind-metric-label">Saved per submission readiness review through automated correlation</div></div>
+      <div class="ind-quote"><p class="ind-quote-text">"Audit readiness used to take four people two weeks. NexaAI answers the same questions in the first twenty minutes of an inspection."</p><span class="ind-quote-author">Head of Regulatory Affairs, Medical Device OEM</span></div>
+    </div>
+  </div>
+
+  <!-- ENERGY -->
+  <div class="ind-content" id="ind-energy">
+    <div>
+      <p class="section-tag">Energy</p>
+      <h2 class="ind-title">Proactive obsolescence management across the entire installed asset base</h2>
+      <p class="ind-body">Energy organisations manage long asset lifecycles, complex certification requirements, and supply chains where single-source dependencies can halt programmes worth hundreds of millions. NexaAI delivers the cross-system visibility that long-life, high-consequence environments demand.</p>
+      <div class="ind-cards">
+        <div class="ind-card">
+          <h3 class="ind-card-title">Rapid programme configuration from approved components and qualified suppliers</h3>
+          <p class="ind-card-body">NexaAI assembles and validates optimal asset BOMs from engineering records, procurement history, and supplier data in hours rather than weeks. Compress programme initiation timelines and reduce configuration risk before the first contract is placed.</p>
+        </div>
+        <div class="ind-card">
+          <h3 class="ind-card-title">Precise cost gap intelligence across the full supply chain</h3>
+          <p class="ind-card-body">NexaAI correlates engineering BOMs with supplier pricing, historical spend, and lead time risk — surfacing exactly where target cost and achievable cost diverge. Recover margin early and negotiate from evidence, not estimates.</p>
+        </div>
+        <div class="ind-card">
+          <h3 class="ind-card-title">Proactive obsolescence management across the entire installed asset base</h3>
+          <p class="ind-card-body">NexaAI flags component lifecycle risk across long-life assets years ahead of failure — converting reactive emergency procurement into a planned programme decision. Eliminate unplanned maintenance costs driven by obsolete parts.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ind-sidebar">
+      <div class="ind-metric"><div class="ind-metric-val">85%</div><div class="ind-metric-label">Reduction in time to complete obsolescence impact assessments</div></div>
+      <div class="ind-metric"><div class="ind-metric-val">Full</div><div class="ind-metric-label">Installed base traceability from component lot to field asset to customer site</div></div>
+      <div class="ind-quote"><p class="ind-quote-text">"When a component goes obsolete in a fifteen-year asset lifecycle, the question is not just what to replace it with — it is what breaks if you do."</p><span class="ind-quote-author">Chief Engineer, Advanced Technology Systems Group</span></div>
+    </div>
+  </div>
+
+  <!-- HI-TECH -->
+  <div class="ind-content" id="ind-hitech">
+    <div>
+      <p class="section-tag">Hi-Tech</p>
+      <h2 class="ind-title">Continuous product performance intelligence across the full installed base</h2>
+      <p class="ind-body">High-technology organisations manage complex product portfolios with long service tails, evolving customer requirements, and supply chains under constant obsolescence pressure. NexaAI turns years of operational and service data into live engineering intelligence.</p>
+      <div class="ind-cards">
+        <div class="ind-card">
+          <h3 class="ind-card-title">Continuous product performance intelligence across the full installed base</h3>
+          <p class="ind-card-body">NexaAI correlates field service history, component replacement patterns, and failure modes across every installed asset — turning years of service data into live engineering intelligence. Reduce repeat field failures and accelerate next-generation product decisions.</p>
+        </div>
+        <div class="ind-card">
+          <h3 class="ind-card-title">360-degree installed base view for service revenue and upgrade opportunity</h3>
+          <p class="ind-card-body">NexaAI connects asset records, contract status, and service history to surface upgrade windows and renewal risks across the entire installed base. Protect service revenue and identify commercial opportunities before they are missed.</p>
+        </div>
+        <div class="ind-card">
+          <h3 class="ind-card-title">Early warning system for spare parts risk across long-lifecycle equipment</h3>
+          <p class="ind-card-body">NexaAI monitors component lifecycle status and supply chain health for every part across every installed asset — flagging obsolescence years ahead. Eliminate emergency procurement costs and guarantee service delivery continuity.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ind-sidebar">
+      <div class="ind-metric"><div class="ind-metric-val">3×</div><div class="ind-metric-label">Faster identification of repeat field failure patterns across the installed base</div></div>
+      <div class="ind-metric"><div class="ind-metric-val">Years</div><div class="ind-metric-label">Earlier obsolescence warnings enabling planned rather than reactive procurement</div></div>
+      <div class="ind-quote"><p class="ind-quote-text">"Every field failure we investigate tells us something about the next product generation. NexaAI makes sure we actually hear what it is saying."</p><span class="ind-quote-author">VP Engineering, Enterprise Technology Group</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ABOUT ═══════════════ -->
+<div id="section-about" class="section">
+  <div class="about-hero">
+    <div class="about-inner">
+      <h1 class="about-title">Built to answer the questions<br>enterprises <span class="accent">couldn't</span></h1>
+      <p class="about-sub">NexaAI was founded on a single observation: the most consequential operational questions in any enterprise cross system boundaries — and no single system was designed to answer them.</p>
+    </div>
+  </div>
+  <div class="about-values">
+    <div class="about-value">
+      <h3 class="about-value-title">Precision over approximation</h3>
+      <p class="about-value-body">Every answer NexaAI gives is computed from authoritative source records. We believe operational decisions deserve operational facts — not probabilistic guesses dressed as certainty.</p>
+    </div>
+    <div class="about-value">
+      <h3 class="about-value-title">Traceability as a standard</h3>
+      <p class="about-value-body">Every answer cites its sources. Every conclusion shows its reasoning. Every data access is logged. Traceability is not a compliance feature — it is the foundational design principle everything else is built on.</p>
+    </div>
+    <div class="about-value">
+      <h3 class="about-value-title">Integration, not replacement</h3>
+      <p class="about-value-body">Enterprises have invested decades in the systems they run. NexaAI does not ask them to replace those systems — it asks them to connect them. Our value is in the intersection, not the displacement.</p>
+    </div>
+  </div>
+  <div class="about-mission">
+    <div>
+      <h2 class="about-mission-title">Our mission</h2>
+      <p class="about-mission-body" style="margin-bottom:20px">To give every operational leader in every regulated enterprise the ability to ask any cross-system question and receive a complete, cited, auditable answer in seconds — not days.</p>
+      <p class="about-mission-body" style="margin-bottom:20px">We believe that the most important decisions organisations make are shaped not by a shortage of data, but by the inability to connect it at the speed decisions require.</p>
+      <p class="about-mission-body">We are building for the leaders who carry the consequence of those decisions — the quality directors, supply chain managers, engineers, and regulatory heads who are accountable when the wrong call is made with incomplete information.</p>
+    </div>
+    <div class="about-facts">
+      <div class="about-fact"><div class="about-fact-val">2023</div><div class="about-fact-text">Founded with a focus on structured operational intelligence for regulated industries</div></div>
+      <div class="about-fact"><div class="about-fact-val">10+</div><div class="about-fact-text">Enterprise system classes connected in the core intelligence layer</div></div>
+      <div class="about-fact"><div class="about-fact-val">5</div><div class="about-fact-text">Industries served — discrete manufacturing, process, life science, energy, and hi-tech</div></div>
+      <div class="about-fact"><div class="about-fact-val">100%</div><div class="about-fact-text">Of answers cited to source records — traceability is non-negotiable at NexaAI</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ RESOURCES ═══════════════ -->
+<div id="section-resources" class="section">
+  <div class="prod-hero">
+    <div class="prod-hero-inner">
+      <p class="section-tag">Resources</p>
+      <h1 style="font-size:clamp(32px,4vw,52px);font-weight:800;letter-spacing:-.03em;margin-bottom:18px;line-height:1.1;color:var(--text)">Insights for operational intelligence leaders</h1>
+      <p style="font-size:17px;color:var(--muted);line-height:1.75;max-width:540px">Research, guides, and perspectives on cross-system intelligence, enterprise data governance, and operational decision-making in regulated industries.</p>
+    </div>
+  </div>
+  <div class="res-wrap">
+    <div class="res-filter">
+      <button class="res-filter-btn active">All</button>
+      <button class="res-filter-btn">Whitepaper</button>
+      <button class="res-filter-btn">Case Study</button>
+      <button class="res-filter-btn">Guide</button>
+      <button class="res-filter-btn">Perspective</button>
+    </div>
+    <div class="res-grid">
+      <div class="res-card"><div class="res-card-img blue">📊</div><div class="res-card-body"><p class="res-card-type">Whitepaper</p><h3 class="res-card-title">The Cost of Disconnected Operational Data in Regulated Industries</h3><p class="res-card-excerpt">Quantifying the hidden cost of fragmented system intelligence across supply chain, quality, production, and regulatory functions.</p></div></div>
+      <div class="res-card"><div class="res-card-img green">🔬</div><div class="res-card-body"><p class="res-card-type">Case Study</p><h3 class="res-card-title">From Five Systems to One Answer: Operational Intelligence in a Medical Device OEM</h3><p class="res-card-excerpt">How a global manufacturer reduced cross-system query time from days to seconds and improved audit readiness across four regulatory markets.</p></div></div>
+      <div class="res-card"><div class="res-card-img amber">⚡</div><div class="res-card-body"><p class="res-card-type">Guide</p><h3 class="res-card-title">The Enterprise Intelligence Readiness Assessment: A Framework for Operational Leaders</h3><p class="res-card-excerpt">A structured framework for evaluating your organisation's readiness to deploy cross-system operational intelligence.</p></div></div>
+      <div class="res-card"><div class="res-card-img purple">🛡</div><div class="res-card-body"><p class="res-card-type">Whitepaper</p><h3 class="res-card-title">Data Governance for Operational AI: Why Traceability Is the New Security</h3><p class="res-card-excerpt">Enterprise AI systems that cannot cite their sources create new categories of operational and compliance risk.</p></div></div>
+      <div class="res-card"><div class="res-card-img blue">🔗</div><div class="res-card-body"><p class="res-card-type">Perspective</p><h3 class="res-card-title">Why Enterprise Search Is Not Operational Intelligence — And Why the Difference Matters</h3><p class="res-card-excerpt">Document retrieval and operational intelligence solve fundamentally different problems.</p></div></div>
+      <div class="res-card"><div class="res-card-img green">🏭</div><div class="res-card-body"><p class="res-card-type">Case Study</p><h3 class="res-card-title">Lot Traceability at Scale: Connecting Incoming Inspection to Field Asset in a Single Query</h3><p class="res-card-excerpt">How a precision manufacturer scoped a potential recall in under four minutes across six production batches.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-wrap">
+  <div class="faq-inner">
+    <p class="section-tag">Frequently asked questions</p>
+    <h2 class="section-head" style="margin-bottom:10px">Everything you need to know</h2>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:44px;line-height:1.7">Answers to the questions operational and technology leaders ask most when evaluating NexaAI.</p>
+
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><h3>What problem does your platform solve?</h3><span class="faq-icon">+</span></div>
+      <div class="faq-body"><p>Our platform transforms fragmented enterprise data into a unified intelligence layer that enables faster, evidence-backed operational and engineering decisions. It reduces investigation time, improves knowledge access, and enhances enterprise productivity across complex industrial environments.</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><h3>What makes your platform "Agentic AI"?</h3><span class="faq-icon">+</span></div>
+      <div class="faq-body"><p>The platform goes beyond search by reasoning across enterprise systems, analysing operational context, and generating traceable recommendations. It acts as an intelligent enterprise decision assistant that collaborates with human experts — autonomously connecting signals, identifying risk, and surfacing the right answer without waiting to be told exactly where to look.</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><h3>How is this different from traditional enterprise search?</h3><span class="faq-icon">+</span></div>
+      <div class="faq-body"><p>Traditional search retrieves documents, while our platform understands relationships, context, and operational intent. It combines semantic search, AI reasoning, and enterprise knowledge orchestration to deliver actionable intelligence — not a list of links for a human to manually evaluate and cross-reference.</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><h3>How does the platform ensure trustworthy AI outputs?</h3><span class="faq-icon">+</span></div>
+      <div class="faq-body"><p>Every insight is grounded in enterprise data with full traceability, citations, confidence scoring, and explainable reasoning. This enables enterprises to trust and validate AI-assisted decisions in regulated and mission-critical operations — every answer can be traced back to the source record that supports it.</p></div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q"><h3>Which industries benefit most from the platform?</h3><span class="faq-icon">+</span></div>
+      <div class="faq-body"><p>The platform is purpose-built for Discrete Manufacturing, Process Manufacturing, Life Sciences, Energy, and Hi-Tech — where operational complexity and fragmented knowledge create decision bottlenecks. It unifies enterprise intelligence across engineering, operations, maintenance, and compliance domains to accelerate decisions at every level of the organisation.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo" style="cursor:pointer" onclick="showSection('overview')">
+          <div class="logo-mark">N</div>
+          <span class="logo-text">Nexa<span>AI</span></span>
+        </div>
+        <p>Enterprise operational intelligence. Every answer cited. Every decision traceable. Every system connected.</p>
+      </div>
+      <div>
+        <p class="footer-col-title">Platform</p>
+        <ul class="footer-links">
+          <li onclick="showSection('product')">Cross-System Intelligence</li>
+          <li onclick="showSection('product')">Decision Confidence</li>
+          <li onclick="showSection('product')">Security &amp; Governance</li>
+          <li>Integrations</li>
+          <li>API Documentation</li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Solutions</p>
+        <ul class="footer-links">
+          <li onclick="showSection('solutions')">Supply Chain</li>
+          <li onclick="showSection('solutions')">Quality &amp; Compliance</li>
+          <li onclick="showSection('solutions')">Production &amp; Operations</li>
+          <li onclick="showSection('solutions')">Regulatory &amp; Submissions</li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Company</p>
+        <ul class="footer-links">
+          <li onclick="showSection('about')">About NexaAI</li>
+          <li onclick="showSection('resources')">Resources</li>
+          <li>Careers</li>
+          <li>Contact</li>
+          <li>Request a Demo</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 NexaAI. All rights reserved.</p>
+      <div class="footer-legal">
+        <a>Privacy Policy</a><a>Terms of Service</a><a>Security</a><a>Cookie Preferences</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Navigation ──────────────────────────────────────────────────
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const sec = document.getElementById('section-' + id);
+  if (sec) sec.classList.add('active');
+  const tab = document.getElementById('tab-' + id);
+  if (tab) tab.classList.add('active');
+  if (id === 'industries') { const t = document.getElementById('tab-industries'); if(t) t.classList.add('active'); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Product tabs ─────────────────────────────────────────────────
+const capIds = ['intelligence','decisions','security'];
+document.querySelectorAll('.cap-tab').forEach((btn, i) => {
+  btn.onclick = function() {
+    document.querySelectorAll('.cap-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.cap-tab').forEach(t => t.classList.remove('active'));
+    const el = document.getElementById('cap-' + capIds[i]);
+    if (el) el.classList.add('active');
+    this.classList.add('active');
+  };
+});
+
+// ── Industry tabs ────────────────────────────────────────────────
+function showIndustry(id) {
+  document.querySelectorAll('.ind-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.ind-tab').forEach(t => t.classList.remove('active'));
+  const el = document.getElementById('ind-' + id);
+  if (el) el.classList.add('active');
+  const tab = document.getElementById('ind-tab-' + id);
+  if (tab) tab.classList.add('active');
+}
+
+// ── FAQ ──────────────────────────────────────────────────────────
+function toggleFaq(el) {
+  var body = el.querySelector('.faq-body');
+  var icon = el.querySelector('.faq-icon');
+  var isOpen = body.style.display === 'block';
+  body.style.display = isOpen ? 'none' : 'block';
+  icon.textContent = isOpen ? '+' : '−';
+  el.style.borderColor = isOpen ? 'var(--border)' : 'rgba(37,99,235,.35)';
+}
+document.querySelectorAll('.faq-item').forEach(function(el) {
+  el.addEventListener('click', function() { toggleFaq(el); });
+});
+
+// ── Resource filter buttons ──────────────────────────────────────
+document.querySelectorAll('.res-filter-btn').forEach(btn => {
+  btn.onclick = function() {
+    document.querySelectorAll('.res-filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  };
+});
+// ── Hero Video Sequence ──────────────────────────────────────────
+(function() {
+  var vids = ['video1.mp4','video2.mp4','video3.mp4','video4.mp4'];
+  var i = 0;
+  var v = document.getElementById('hero-vid');
+  if (!v) return;
+  v.addEventListener('ended', function() {
+    i = (i + 1) % vids.length;
+    v.src = vids[i];
+    v.load();
+    v.play();
+  });
+})();
+
+
+
+
+</body>
+</html>
